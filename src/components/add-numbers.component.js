@@ -10,7 +10,8 @@ export default class AddNumber extends Component {
 
         this.state = {
             id: null,
-            number: "", 
+            num: null, 
+            subbmited: false
         }; 
     }
 
@@ -24,12 +25,12 @@ export default class AddNumber extends Component {
         var data = {
             num: this.state.num
         };
-     
 
         NumberDataService.create(data)
             .then(response => {
                 this.setState({
-                    num: response.data.num
+                    num: response.data.num, 
+                    subbmited: true
                 }); 
                 console.log(response.data); 
         })
@@ -37,4 +38,46 @@ export default class AddNumber extends Component {
             console.log(e); 
         })
     };
+
+    newNumbers(){
+        this.setState({
+            id: null,
+            num: null,
+            subbmited: false
+        });
+    }
+
+    render(){
+        return(
+            <div className="submit-form">
+                {this.state.subbmited ? (
+                    <div>
+                        <h4>You submitted successfully!</h4>
+                        <button className="btn btn-success" onClick={this.newNumbers}>
+                            Add
+                        </button>
+                    </div>
+                ) : (
+                    <div>
+                        <div className="form-group">
+                            <label htmlFor="number">Number</label>
+                            <input
+                                type="number"
+                                className="form-control"
+                                id="number"
+                                required
+                                value={this.state.num}
+                                onChange={this.onChangeNumber}
+                                name="number"
+                            />
+                        </div>
+
+                        <button onClick={this.saveNumber} className="btn btn-success">
+                            Submit
+                        </button>
+                    </div>
+                )}
+            </div>
+        ); 
+    }
 }
