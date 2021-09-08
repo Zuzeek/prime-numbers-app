@@ -12,6 +12,10 @@ class NumberDataService {
     create(data) {
         return http.post("/add", data); 
     }
+
+    deleteAll() {
+        return http.delete("/number");
+      }
 }
 
 export default new NumberDataService(); 
