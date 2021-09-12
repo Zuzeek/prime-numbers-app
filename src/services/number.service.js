@@ -5,8 +5,8 @@ class NumberDataService {
         return http.get("/numbers"); 
     }
 
-    getListOfPrimeNumbers(data) {
-        return http.get("/number", data); 
+    getPrimeNumbers(data) {
+        return http.get("/primeNumbers", data); 
     }
 
     create(data) {
@@ -14,7 +14,7 @@ class NumberDataService {
     }
 
     deleteAll() {
-        return http.delete("/number");
+        return http.delete("/delete");
       }
 }
 

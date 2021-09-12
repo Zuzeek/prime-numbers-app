@@ -1,5 +1,6 @@
 import React, { Component } from "react"; 
 import NumberDataService from "../services/number.service"; 
+import Button from 'react-bootstrap/Button';
 
 export default class AddNumber extends Component {
     constructor(props) {
@@ -7,29 +8,30 @@ export default class AddNumber extends Component {
         this.onChangeNumber = this.onChangeNumber.bind(this);
         this.saveNumber = this.saveNumber.bind(this);
         this.newNumbers = this.newNumbers.bind(this); 
+        this.removeAllPrimeNumbers = this.removeAllPrimeNumbers(this); 
 
         this.state = {
             id: null,
-            num: null, 
+            number: null, 
             subbmited: false
         }; 
     }
 
     onChangeNumber(e) {
         this.setState({
-            num: e.target.value
+            number: e.target.value
         }); 
     }
 
     saveNumber() {
         var data = {
-            num: this.state.num
+            number: this.state.number
         };
 
         NumberDataService.create(data)
             .then(response => {
                 this.setState({
-                    num: response.data.num, 
+                    number: response.data.number, 
                     subbmited: true
                 }); 
                 console.log(response.data); 
@@ -42,9 +44,20 @@ export default class AddNumber extends Component {
     newNumbers(){
         this.setState({
             id: null,
-            num: null,
+            number: null,
             subbmited: false
         });
+    }
+
+    removeAllPrimeNumbers() {
+        NumberDataService.deleteAll()
+            .then(response => {
+                console.log(response.data);
+                this.refreshList(); 
+            })
+            .catch(e => {
+                console.log(e); 
+            }); 
     }
 
     render(){
@@ -53,28 +66,25 @@ export default class AddNumber extends Component {
                 {this.state.subbmited ? (
                     <div>
                         <h4>You submitted successfully!</h4>
-                        <button className="btn btn-success" onClick={this.newNumbers}>
-                            Add
-                        </button>
+                        <Button variant="danger" onClick={this.removeAllPrimeNumbers}>Delete All Numbers</Button>{'  '}
+                        <Button variant="success" onClick={this.newNumbers}>Add New</Button>{' '}
                     </div>
                 ) : (
                     <div>
                         <div className="form-group">
-                            <label htmlFor="number">Number</label>
+                            <label htmlFor="number">Number:</label>
                             <input
                                 type="number"
                                 className="form-control"
                                 id="number"
                                 required
-                                value={this.state.num}
+                                value={this.state.number}
                                 onChange={this.onChangeNumber}
                                 name="number"
                             />
                         </div>
-
-                        <button onClick={this.saveNumber} className="btn btn-success">
-                            Submit
-                        </button>
+                        <br></br>
+                        <Button variant="success" onClick={this.saveNumber}>Submit</Button>{' '}
                     </div>
                 )}
             </div>

@@ -1,41 +1,42 @@
 import React, { Component } from "react";
 import NumberDataService from "../services/number.service"; 
+import { Link } from "react-router-dom";
+import Button from 'react-bootstrap/Button';
 
 export default class NumberList extends Component {
     constructor(props) {
         super(props); 
-        this.onChangeSearchNumbers = this.onChangeSearchNumbers.bind(this); 
-        this.retriveNumbers = this.retriveNumbers.bind(this); 
+        this.onChangeGetNumbers = this.onChangeGetNumbers.bind(this); 
+        this.retriveAllNumbers = this.retriveAllNumbers.bind(this); 
         this.refreshList = this.refreshList.bind(this); 
         this.removeAllNumbers = this.removeAllNumbers.bind(this); 
-        this.searchNumbers = this.searchNumbers.bind(this); 
 
         this.state = {
             numbers: [], 
             currentNumber: null, 
             currentIndex: -1, 
-            searchNumber: ""
+            getNumber: ""
         };
     }
 
     componentDidMount() {
-        this.retriveNumbers(); 
+        this.retriveAllNumbers(); 
     }
 
-    onChangeSearchNumbers(e) {
-        const searchNumber = e.target.value; 
+    onChangeGetNumbers(e) {
+        const getNumber = e.target.value; 
         this.setState({
-            searchNumber: searchNumber
+            getNumber: getNumber
         }); 
     }
 
-    retriveNumbers(){
+    retriveAllNumbers(){
         NumberDataService.getAll()
             .then(response => {
                 this.setState({
-                    numbers: response.data
+                    numbers: response.data.number
                 }); 
-                console.log(response.data); 
+                console.log(response.data.numbers); 
             })
             .catch(e => {
                 console.log(e); 
@@ -43,7 +44,7 @@ export default class NumberList extends Component {
     }
 
     refreshList() {
-        this.retriveNumbers();
+        this.retriveAllNumbers();
         this.setState({
             currentNumber: null,
             currentIndex: -1
@@ -68,66 +69,60 @@ export default class NumberList extends Component {
             }); 
     }
 
-    searchNumbers(){
-        this.setState({
-            currentNumber: null, 
-            currentIndex: -1
-        }); 
-    }
-
     render(){
-        const { searchNumber, numbers, currentNumber, currentIndex } = this.state;
+        const { numbers, currentNumber, currentIndex } = this.state;
 
         return (
         <div className="list row">
             <div className="col-md-8">
-                <div className="input-group mb-3">
-                    <input
-                        type="number"
-                        className="form-control"
-                        placeholder="Search by number"
-                        value={searchNumber}
-                        onChange={this.onChangeSearchNumbers}
-                    />
                 <div className="input-group-append">
-                    <button
-                        className="btn btn-outline-secondary"
-                        type="button"
-                        onClick={this.searchNumber}
-                    >
-                        Search
-                    </button>
+                    <Button variant="success" onClick={this.retriveAllNumbers}>Get All Numbers</Button>{' '}
                 </div>
             </div>
-        </div>
+            <br></br>
             <div className="col-md-6">
                 <h4>Number List</h4>
 
                 <ul className="list-group">
                     {numbers &&
-                    numbers.map((number, index) => (
-                        <li
-                            className={
+                    numbers.map((num, index) => (
+                        <li className={
                                 "list-group-item " +
                                 (index === currentIndex ? "active" : "")
                             }
-                            onClick={() => this.setActiveNumber(number, index)}
+                            onClick={() => this.setActiveNumber(num, index)}
                             key={index}
                         >
-                            {number.title}
+                            {num}
                         </li>
                     ))}
                 </ul>
+            </div>
+            <br></br>
+            <div>
+                <Button variant="danger" onClick={this.removeAllNumbers}>Delete All Numbers</Button>{'  '}
+            </div>
+            <div className="col-md-6">
+                {currentNumber ? (
+                    <div>
+                        <h4>Numbers</h4>
+                        <div>
+                            <label>
+                                <strong>Number:</strong>
+                            </label>{" "}
+                            {currentNumber.num}
+                        </div>
 
-                <button
-                    className="m-3 btn btn-sm btn-danger"
-                    onClick={this.removeAllNumbers}
-                >
-                    Remove All
-                </button>
+                        <Link to={"/add" + currentNumber}
+                        className="badge badge-waring">
+                            Add Numbers
+                        </Link>
+                    </div>
+                ) : (
+                <div></div>
+                )}
             </div>
         </div>
         );
     }
-
 }

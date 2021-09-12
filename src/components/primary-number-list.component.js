@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import NumberDataService from "../services/number.service"; 
+import Button from 'react-bootstrap/Button';
 
 export default class PrimeNumberList extends Component {
     constructor(props) {
@@ -30,10 +31,13 @@ export default class PrimeNumberList extends Component {
     }
 
     retrivePrimeNumbers(){
-        NumberDataService.getListOfPrimeNumbers()
+        var data = {
+            num: this.state.num
+        };
+        NumberDataService.getPrimeNumbers(data)
             .then(response => {
                 this.setState({
-                    numbers: response.data
+                    numbers: response.data.num
                 }); 
                 console.log(response.data); 
             })
@@ -76,7 +80,7 @@ export default class PrimeNumberList extends Component {
     }
 
     render(){
-        const { searchPrimeNumber, numbers, currentNumber: currentPrimeNumber, currentIndex } = this.state;
+        const { searchPrimeNumber, numbers, currentNumber: currentIndex } = this.state;
 
         return (
         <div className="list row">
@@ -89,20 +93,15 @@ export default class PrimeNumberList extends Component {
                         value={searchPrimeNumber}
                         onChange={this.onChangeSearchPrimeNumbers}
                     />
+                    <br></br>
                 <div className="input-group-append">
-                    <button
-                        className="btn btn-outline-secondary"
-                        type="button"
-                        onClick={this.searchPrimeNumber}
-                    >
-                        Search
-                    </button>
+                    <Button variant="success" onClick={this.searchPrimeNumber}>Get Prime Numbers</Button>{' '}
                 </div>
             </div>
         </div>
+        <br></br>
             <div className="col-md-6">
-                <h4>Prime Number List</h4>
-
+                <h4>Prime Number List:</h4>
                 <ul className="list-group">
                     {numbers &&
                     numbers.map((number, index) => (
@@ -118,13 +117,10 @@ export default class PrimeNumberList extends Component {
                         </li>
                     ))}
                 </ul>
-
-                <button
-                    className="m-3 btn btn-sm btn-danger"
-                    onClick={this.removeAllPrimeNumbers}
-                >
-                    Remove All
-                </button>
+            </div>
+            <br></br>
+            <div>
+                <Button variant="danger" onClick={this.removeAllNumbers}>Delete All Numbers</Button>{'  '}
             </div>
         </div>
         );
