@@ -1,8 +1,9 @@
 import React, { Component } from "react"; 
 import NumberDataService from "../services/number.service"; 
 import Button from 'react-bootstrap/Button';
+import PrimaryNumberList from "./primary-number-list.component";
 
-export default class AddNumber extends Component {
+export default class AddNumbers extends Component {
     constructor(props) {
         super(props);
         this.onChangeNumber = this.onChangeNumber.bind(this);
@@ -13,7 +14,10 @@ export default class AddNumber extends Component {
         this.state = {
             id: null,
             number: null, 
-            subbmited: false
+            subbmited: false,
+            primeNumbers: [], 
+            currentPrimeNumber: null, 
+            currentIndex: -1, 
         }; 
     }
 
@@ -48,6 +52,14 @@ export default class AddNumber extends Component {
             subbmited: false
         });
     }
+    
+    refreshList() {
+        this.retrivePrimeNumbers();
+        this.setState({
+            currentPrimeNumber: null,
+            currentIndex: -1
+        }); 
+    }
 
     removeAllPrimeNumbers() {
         NumberDataService.deleteAll()
@@ -61,6 +73,14 @@ export default class AddNumber extends Component {
     }
 
     render(){
+        
+        let numberValue; 
+        if(!this.state.number) {
+            numberValue = ""; 
+        } else {
+            numberValue = this.state.number; 
+        }
+
         return(
             <div className="submit-form">
                 {this.state.subbmited ? (
@@ -78,7 +98,7 @@ export default class AddNumber extends Component {
                                 className="form-control"
                                 id="number"
                                 required
-                                value={this.state.number}
+                                value={numberValue}
                                 onChange={this.onChangeNumber}
                                 name="number"
                             />
@@ -87,6 +107,12 @@ export default class AddNumber extends Component {
                         <Button variant="success" onClick={this.saveNumber}>Submit</Button>{' '}
                     </div>
                 )}
+
+            <div>
+                <br></br>
+                <Button variant ="success" onClick={PrimaryNumberList}>Get Prime Numbers</Button>
+
+            </div>
             </div>
         ); 
     }

@@ -1,6 +1,6 @@
 import React, { Component } from "react"; 
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Route, Switch, Link} from 'react-router-dom';
+import { Route, Switch} from 'react-router-dom';
 import "./App.css"; 
 import { Navbar, Container, Nav } from 'react-bootstrap'
 
@@ -18,20 +18,14 @@ class App extends Component {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="#add">
-                <Link to={"/add"} className="nav-link">
+              <Nav.Link href="/add">
                   Add Numbers
-                </Link>
               </Nav.Link>
-              <Nav.Link href="#numbers">
-                <Link to={"/numbers"} className="nav-link">
+              <Nav.Link href="/numbers">
                   Get All Numbers
-                </Link>
               </Nav.Link>
-              <Nav.Link href="#primeNumbers">
-              <Link to={"/primeNumbers"} className="nav-link">
+              <Nav.Link href="/primeNumbers">
                 Get Primary Numbers
-              </Link>
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>

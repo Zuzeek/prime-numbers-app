@@ -5,17 +5,16 @@ import Button from 'react-bootstrap/Button';
 export default class PrimeNumberList extends Component {
     constructor(props) {
         super(props); 
-        this.onChangeSearchPrimeNumbers = this.onChangeSearchPrimeNumbers.bind(this); 
+        this.onChangeGetPrimeNumbers = this.onChangeGetPrimeNumbers.bind(this); 
         this.retrivePrimeNumbers = this.retrivePrimeNumbers.bind(this); 
         this.refreshList = this.refreshList.bind(this); 
-        this.removeAllNumbers = this.removeAllPrimeNumbers.bind(this); 
-        this.searchNumbers = this.searchPrimeNumbers.bind(this); 
+        this.removeAllNumbers = this.removeAllNumbers.bind(this); 
 
         this.state = {
             primeNumbers: [], 
             currentPrimeNumber: null, 
             currentIndex: -1, 
-            searchPrimeNumber: ""
+            getPrimeNumber: ""
         };
     }
 
@@ -23,10 +22,10 @@ export default class PrimeNumberList extends Component {
         this.retrivePrimeNumbers(); 
     }
 
-    onChangeSearchPrimeNumbers(e) {
-        const searchPrimeNumber = e.target.value; 
+    onChangeGetPrimeNumbers(e) {
+        const getPrimeNumbers = e.target.value; 
         this.setState({
-            searchPrimeNumber: searchPrimeNumber
+            getPrimeNumber: getPrimeNumbers
         }); 
     }
 
@@ -61,7 +60,7 @@ export default class PrimeNumberList extends Component {
         }); 
     }
 
-    removeAllPrimeNumbers() {
+    removeAllNumbers() {
         NumberDataService.deleteAll()
             .then(response => {
                 console.log(response.data);
@@ -80,7 +79,7 @@ export default class PrimeNumberList extends Component {
     }
 
     render(){
-        const { searchPrimeNumber, numbers, currentNumber: currentIndex } = this.state;
+        const { getPrimeNumber: searchPrimeNumber, numbers, currentNumber: currentIndex } = this.state;
 
         return (
         <div className="list row">
@@ -91,7 +90,7 @@ export default class PrimeNumberList extends Component {
                         className="form-control"
                         placeholder="Search by prime number"
                         value={searchPrimeNumber}
-                        onChange={this.onChangeSearchPrimeNumbers}
+                        onChange={this.onChangeGetPrimeNumbers}
                     />
                     <br></br>
                 <div className="input-group-append">
@@ -125,5 +124,4 @@ export default class PrimeNumberList extends Component {
         </div>
         );
     }
-
 }
