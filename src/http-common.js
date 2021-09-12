@@ -3,8 +3,12 @@ import axios from "axios";
 export default axios.create({
     baseURL: "http://localhost:8087/api", 
     timeout: 3000,
+    withCredentials: false,
     headers: {
-        "Content-typ": "application/json"
+        "Content-typ": "application/json",
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin' : '*',
+        'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS'
     }
 }); 
 
